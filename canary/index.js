@@ -6,23 +6,26 @@ const app = new Koa()
 const router = new Router()
 
 router.get('/', (ctx) => {
+  throw new Error('canary')
   console.log('get /')
   ctx.body = 'canary'
 })
 
 app.use(router.routes())
 
-app.on('error', console.log)
+// app.on('error', console.log)
+// app.listen(3001)
+// process.on('message', (msg) => {
+//   console.log(msg)
+//   switch (msg.cmd) {
+//     case 'req':
+//       {
+//         const socket = net.createConnection({path: msg.ipcPath})
+//         socket.setHeader = () => {}
+//         app.callback()(msg.req, socket)
+//       }
+//       break
+//   }
+// })
 
-process.on('message', (msg) => {
-  console.log(msg)
-  switch (msg.cmd) {
-    case 'req':
-      {
-        const socket = net.createConnection({path: msg.ipcPath})
-        socket.setHeader = () => {}
-        app.callback()(msg.req, socket)
-      }
-      break
-  }
-})
+module.exports = app

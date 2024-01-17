@@ -10,6 +10,11 @@ const ipcPrefix =
   (process.platform != 'win32' ? '/tmp/' : '\\\\.\\pipe\\') +
   crypto.randomBytes(8).toString('hex')
 let requestNumber = 0
+
+var httpProxy = require('http-proxy')
+
+var proxy = httpProxy.createProxyServer() // See (†)
+
 http
   .createServer((req, res) => {
     const {pathname} = url.parse(req.url)
@@ -21,7 +26,7 @@ http
       headers: req.headers,
       url: pathname,
     }
-
+    proxy.web(req, res, {target: 'http://localhost:3001'})
     // const creq = http.request(opts, (cres) => {
     //   // passthrough status code and headers
     //   sres.writeHead(cres.statusCode, cres.headers)
